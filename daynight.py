@@ -30,8 +30,9 @@ def init():
 	d = t[2]
 	h = t[3]
 	mins = t[4]
+	secs = t[5]
 
-	h = h + mins/60.
+	h = h + mins/60. + secs / 3600.
 	return y, m, d, h
 
 #   Get the days to J2000
