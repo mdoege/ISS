@@ -12,7 +12,7 @@ There are two different versions:
 
 The place name database used for cities.png is from [Natural Earth](https://www.naturalearthdata.com/).
 
-iss3.py:
+iss2.py:
 ![screenshot](screenshot2.png "ISS Tracker screenshot")
 
 iss.py:
