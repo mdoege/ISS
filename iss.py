@@ -5,6 +5,7 @@
 import pygame
 import json, time
 from urllib.request import urlopen
+from daynight import get_img
 
 bg = pygame.image.load("cities.png")
 b2 = pygame.image.load("earth4k_3_bright.png")
@@ -53,7 +54,7 @@ class ISS:
 			if len(s.lpos) > 100:
 				s.lpos = s.lpos[-100:]
 			s.last = time.time()
-
+			s.dn = get_img()
 			mx = int((180 + s.lon) * 8192 / 360)
 			my = int(( 90 - s.lat) * 4096 / 180)
 			for y in range(100):
@@ -67,6 +68,7 @@ class ISS:
 		out = pygame.transform.scale(s.plot, (500, 500))
 		s.screen.blit(out, (0, 0))	
 		s.screen.blit(b2, (500, 0))
+		s.screen.blit(s.dn, (500, 0))
 
 		if s.lat != 0 or s.lon != 0:
 			lx = int((180 + s.lon) * 1000 / 360) + 500
