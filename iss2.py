@@ -83,7 +83,6 @@ class ISS:
 			s.dn = get_img()
 
 		out = pygame.transform.scale(s.plot, (500, 500))
-		s.screen.blit(out, (0, 0))	
 		s.screen.blit(b2, (500, 0))
 		s.screen.blit(s.dn, (500, 0))
 
@@ -93,19 +92,23 @@ class ISS:
 			l2 = int(( 90 - s.lpos[n][0]) *  500 / 180)
 			l3 = int((180 + s.lpos[n+1][1]) * 1000 / 360) + 500
 			l4 = int(( 90 - s.lpos[n+1][0]) *  500 / 180)
+			if n >= len(s.lpos) // 2:
+				c = (255, 255, 0)
+			else:
+				c = (255, 0, 0)
 			if abs(l1 - l3) < 100 and abs(l2 - l4) < 100:
-				if n >= len(s.lpos) // 2:
-					c = (255, 255, 0)
-				else:
-					c = (255, 0, 0)
 				pygame.draw.line(s.screen, c, (l1, l2), (l3, l4), 4)
+			else:
+				pygame.draw.line(s.screen, c, (l1, l2), (l3 + 1000, l4), 4)
+				pygame.draw.line(s.screen, c, (l1 - 1000, l2), (l3, l4), 4)
 
 		# draw current position
-		if s.lat != 0 or s.lon != 0:
-			lx = int((180 + s.lon) * 1000 / 360) + 500
-			ly = int(( 90 - s.lat) *  500 / 180)
-			if time.time() % 1 < .5:
-				pygame.draw.rect(s.screen, (255, 0, 0), [lx - 6, ly - 6, 13, 13])	
+		lx = int((180 + s.lon) * 1000 / 360) + 500
+		ly = int(( 90 - s.lat) *  500 / 180)
+		if time.time() % 1 < .5:
+			pygame.draw.rect(s.screen, (255, 0, 0), [lx - 6, ly - 6, 13, 13])
+
+		s.screen.blit(out, (0, 0))
 		pygame.display.flip()
 
 c = ISS()
