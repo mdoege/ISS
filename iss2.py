@@ -6,6 +6,9 @@ import pygame
 from skyfield.api import load, wgs84, utc
 import time, datetime
 
+UPDATE = .5         # zoomed map update interval in s
+UPDATETRACK = 10    # track update interval in s
+
 bg = pygame.image.load("cities.png")
 b2 = pygame.image.load("earth4k_3_bright.png")
 b2 = pygame.transform.scale(b2, (1000, 500))
@@ -31,6 +34,7 @@ class ISS:
 		pygame.display.set_caption('ISS Tracker')
 		s.clock = pygame.time.Clock()
 		s.last = 0
+		s.lasttrack = 0
 		s.plot = pygame.Surface((100, 100))
 		s.lpos = []
 
@@ -47,21 +51,10 @@ class ISS:
 		pygame.quit()
 
 	def update(s):
-		if time.time() - s.last > 10:
+		# update zoomed map
+		if time.time() - s.last > UPDATE:
 			s.lat, s.lon = getpos()
 			s.last = time.time()
-			s.lpos = []
-			# calculate track for +-90 minutes:
-			for x in range(-90, 91):
-				tnow = datetime.datetime.utcnow()
-				tnow = tnow.replace(tzinfo = utc)
-				td = datetime.timedelta(minutes = 1)
-				t = tnow + x * td
-				t = ts.from_datetime(t)
-				geocentric = satellite.at(t)
-				lat, lon = wgs84.latlon_of(geocentric)
-				s.lpos.append((lat.degrees, lon.degrees))
-
 			mx = int((180 + s.lon) * 8192 / 360)
 			my = int(( 90 - s.lat) * 4096 / 180)
 			for y in range(100):
@@ -72,10 +65,26 @@ class ISS:
 						c = 120, 120, 120
 					s.plot.set_at((x, y), c)
 
+		# update track data
+		if time.time() - s.lasttrack > UPDATETRACK:
+			s.lasttrack = time.time()
+			s.lpos = []
+			# calculate track for +-90 minutes:
+			for x in range(-90, 91, 2):
+				tnow = datetime.datetime.utcnow()
+				tnow = tnow.replace(tzinfo = utc)
+				td = datetime.timedelta(minutes = 1)
+				t = tnow + x * td
+				t = ts.from_datetime(t)
+				geocentric = satellite.at(t)
+				lat, lon = wgs84.latlon_of(geocentric)
+				s.lpos.append((lat.degrees, lon.degrees))
+
 		out = pygame.transform.scale(s.plot, (500, 500))
 		s.screen.blit(out, (0, 0))	
 		s.screen.blit(b2, (500, 0))
 
+		# draw track
 		for n in range(0, len(s.lpos) - 1):
 			l1 = int((180 + s.lpos[n][1]) * 1000 / 360) + 500
 			l2 = int(( 90 - s.lpos[n][0]) *  500 / 180)
@@ -87,6 +96,8 @@ class ISS:
 				else:
 					c = (255, 0, 0)
 				pygame.draw.line(s.screen, c, (l1, l2), (l3, l4), 4)
+
+		# draw current position
 		if s.lat != 0 or s.lon != 0:
 			lx = int((180 + s.lon) * 1000 / 360) + 500
 			ly = int(( 90 - s.lat) *  500 / 180)
