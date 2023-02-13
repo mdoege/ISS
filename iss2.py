@@ -5,7 +5,7 @@
 import pygame
 from skyfield.api import load, wgs84, utc
 from daynight import get_img
-import time, datetime
+import time, datetime, os.path
 
 UPDATE = .5         # zoomed map update interval in s
 UPDATETRACK = 10    # track update interval in s
@@ -20,9 +20,19 @@ bg = pygame.image.load("cities.png")
 b2 = pygame.image.load("earth4k_3_bright.png")
 b2 = pygame.transform.scale(b2, (BMAPW, ZMAPW))
 
+# download new orbital elements each day
+try:
+	mtime = os.path.getmtime("stations.txt")
+except:
+	mtime = 0
+if time.time() - mtime > 86400:
+	update = True
+else:
+	update = False
+
 # from https://rhodesmill.org/skyfield/earth-satellites.html
 stations_url = 'https://celestrak.com/NORAD/elements/stations.txt'
-satellites = load.tle_file(stations_url)
+satellites = load.tle_file(stations_url, reload = update)
 by_name = {sat.name: sat for sat in satellites}
 satellite = by_name['ISS (ZARYA)']
 ts = load.timescale()
