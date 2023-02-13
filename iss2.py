@@ -13,6 +13,8 @@ UPDATETRACK = 10    # track update interval in s
 WIN_WIDTH = 1900                # window width
 BMAPW = int(2 / 3 * WIN_WIDTH)  # big map width
 ZMAPW = BMAPW // 2              # zoomed map width
+LWID = 4                        # line width
+CSIZ = int(100 / 8192 * BMAPW)  # cursor size
 
 bg = pygame.image.load("cities.png")
 b2 = pygame.image.load("earth4k_3_bright.png")
@@ -102,16 +104,16 @@ class ISS:
 			else:
 				c = (255, 0, 0)
 			if abs(l1 - l3) < BMAPW / 5 and abs(l2 - l4) < BMAPW / 5:
-				pygame.draw.line(s.screen, c, (l1, l2), (l3, l4), 4)
+				pygame.draw.line(s.screen, c, (l1, l2), (l3, l4), LWID)
 			else:
-				pygame.draw.line(s.screen, c, (l1, l2), (l3 + BMAPW, l4), 4)
-				pygame.draw.line(s.screen, c, (l1 - BMAPW, l2), (l3, l4), 4)
+				pygame.draw.line(s.screen, c, (l1, l2), (l3 + BMAPW, l4), LWID)
+				pygame.draw.line(s.screen, c, (l1 - BMAPW, l2), (l3, l4), LWID)
 
 		# draw current position
 		lx = int((180 + s.lon) * BMAPW / 360) + ZMAPW
 		ly = int(( 90 - s.lat) * ZMAPW / 180)
 		if time.time() % 1 < .5:
-			pygame.draw.rect(s.screen, (255, 0, 0), [lx - 6, ly - 6, 13, 13])
+			pygame.draw.rect(s.screen, (255, 0, 0), [lx - CSIZ // 2, ly - CSIZ // 2, CSIZ, CSIZ])
 
 		s.screen.blit(out, (0, 0))
 		pygame.display.flip()
