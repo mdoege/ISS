@@ -10,9 +10,13 @@ import time, datetime
 UPDATE = .5         # zoomed map update interval in s
 UPDATETRACK = 10    # track update interval in s
 
+WIN_WIDTH = 1900                # window width
+BMAPW = int(2 / 3 * WIN_WIDTH)  # big map width
+ZMAPW = BMAPW // 2              # zoomed map width
+
 bg = pygame.image.load("cities.png")
 b2 = pygame.image.load("earth4k_3_bright.png")
-b2 = pygame.transform.scale(b2, (1000, 500))
+b2 = pygame.transform.scale(b2, (BMAPW, ZMAPW))
 
 # from https://rhodesmill.org/skyfield/earth-satellites.html
 stations_url = 'https://celestrak.com/NORAD/elements/stations.txt'
@@ -30,7 +34,7 @@ def getpos():
 class ISS:
 	def __init__(s):
 		pygame.init()
-		s.res = 1500, 500
+		s.res = ZMAPW + BMAPW, ZMAPW
 		s.screen = pygame.display.set_mode(s.res)
 		pygame.display.set_caption('ISS Tracker')
 		s.clock = pygame.time.Clock()
@@ -81,30 +85,31 @@ class ISS:
 				lat, lon = wgs84.latlon_of(geocentric)
 				s.lpos.append((lat.degrees, lon.degrees))
 			s.dn = get_img()
+			s.dn = pygame.transform.smoothscale(s.dn, (BMAPW, ZMAPW))
 
-		out = pygame.transform.scale(s.plot, (500, 500))
-		s.screen.blit(b2, (500, 0))
-		s.screen.blit(s.dn, (500, 0))
+		out = pygame.transform.scale(s.plot, (ZMAPW, ZMAPW))
+		s.screen.blit(b2, (ZMAPW, 0))
+		s.screen.blit(s.dn, (ZMAPW, 0))
 
 		# draw track
 		for n in range(0, len(s.lpos) - 1):
-			l1 = int((180 + s.lpos[n][1]) * 1000 / 360) + 500
-			l2 = int(( 90 - s.lpos[n][0]) *  500 / 180)
-			l3 = int((180 + s.lpos[n+1][1]) * 1000 / 360) + 500
-			l4 = int(( 90 - s.lpos[n+1][0]) *  500 / 180)
+			l1 = int((180 + s.lpos[n][1]) * BMAPW / 360) + ZMAPW
+			l2 = int(( 90 - s.lpos[n][0]) * ZMAPW / 180)
+			l3 = int((180 + s.lpos[n+1][1]) * BMAPW / 360) + ZMAPW
+			l4 = int(( 90 - s.lpos[n+1][0]) * ZMAPW / 180)
 			if n >= len(s.lpos) // 2:
 				c = (255, 255, 0)
 			else:
 				c = (255, 0, 0)
-			if abs(l1 - l3) < 100 and abs(l2 - l4) < 100:
+			if abs(l1 - l3) < BMAPW / 5 and abs(l2 - l4) < BMAPW / 5:
 				pygame.draw.line(s.screen, c, (l1, l2), (l3, l4), 4)
 			else:
-				pygame.draw.line(s.screen, c, (l1, l2), (l3 + 1000, l4), 4)
-				pygame.draw.line(s.screen, c, (l1 - 1000, l2), (l3, l4), 4)
+				pygame.draw.line(s.screen, c, (l1, l2), (l3 + BMAPW, l4), 4)
+				pygame.draw.line(s.screen, c, (l1 - BMAPW, l2), (l3, l4), 4)
 
 		# draw current position
-		lx = int((180 + s.lon) * 1000 / 360) + 500
-		ly = int(( 90 - s.lat) *  500 / 180)
+		lx = int((180 + s.lon) * BMAPW / 360) + ZMAPW
+		ly = int(( 90 - s.lat) * ZMAPW / 180)
 		if time.time() % 1 < .5:
 			pygame.draw.rect(s.screen, (255, 0, 0), [lx - 6, ly - 6, 13, 13])
 

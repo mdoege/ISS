@@ -133,6 +133,5 @@ def calc_image(res = RES):
 
 def get_img():
 	out, lights = calc_image()
-	out2 = pygame.transform.smoothscale(out, (1000, 500))
-	return out2
+	return out
 
