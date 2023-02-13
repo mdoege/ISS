@@ -55,6 +55,7 @@ class ISS:
 				s.lpos = s.lpos[-100:]
 			s.last = time.time()
 			s.dn = get_img()
+			s.dn = pygame.transform.smoothscale(s.dn, (1000, 500))
 			mx = int((180 + s.lon) * 8192 / 360)
 			my = int(( 90 - s.lat) * 4096 / 180)
 			for y in range(100):
