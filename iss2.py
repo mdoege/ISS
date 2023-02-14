@@ -12,7 +12,7 @@ UPDATETRACK = 10    # track update interval in s
 
 WIN_WIDTH = 1900                # window width
 BMAPW = int(2 / 3 * WIN_WIDTH)  # big map width
-ZMAPW = BMAPW // 2              # zoomed map width
+ZMAPW = WIN_WIDTH - BMAPW       # zoomed map width
 LWID = 4                        # line width
 CSIZ = int(100 / 8192 * BMAPW)  # cursor size
 
