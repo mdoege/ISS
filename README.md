@@ -12,6 +12,8 @@ There are two different versions:
 
 The place name database used for cities.png is from [Natural Earth](https://www.naturalearthdata.com/).
 
+Finally, there are two [Matplotlib](https://matplotlib.org/) ISS plot scripts: map.py for [Basemap](https://matplotlib.org/basemap/) and map2.py for [Cartopy](https://scitools.org.uk/cartopy/). The position is shown at 20-second intervals over the next two hours.
+
 iss2.py:
 ![screenshot](screenshot2.png "ISS Tracker screenshot")
 
