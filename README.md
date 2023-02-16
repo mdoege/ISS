@@ -10,7 +10,7 @@ There are two different versions:
 
 * iss2.py needs [Skyfield](https://rhodesmill.org/skyfield/) to calcuate ISS position and shows the track 90 minutes into the past (red) and future (yellow). The Internet is only needed when the program starts and fetches orbital elements for today which are then saved in stations.txt.
 
-The place name database used for cities.png is from [Natural Earth](https://www.naturalearthdata.com/).
+The place name database used for cities.png is from [Natural Earth](https://www.naturalearthdata.com/). The font is [Bit 5x3](https://www.mattlag.com/bitfonts/).
 
 Finally, there are two [Matplotlib](https://matplotlib.org/) ISS plot scripts: map.py for [Basemap](https://matplotlib.org/basemap/) and map2.py for [Cartopy](https://scitools.org.uk/cartopy/). The position is shown at 20-second intervals over the next two hours.
 
