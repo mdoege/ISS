@@ -25,7 +25,7 @@ try:
 	mtime = os.path.getmtime("stations.txt")
 except:
 	mtime = 0
-if time.time() - mtime > 86400:
+if time.time() - mtime > 40000:
 	update = True
 else:
 	update = False
