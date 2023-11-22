@@ -83,13 +83,14 @@ class ISS:
 					s.plot.set_at((x, y), c)
 
 		# update track data
-		if time.time() - s.lasttrack > UPDATETRACK:
+		dt = time.time() - s.lasttrack
+		if dt > UPDATETRACK or dt < 0:
 			s.lasttrack = time.time()
 			s.lpos = []
 			# calculate track for +-90 minutes:
 			for x in range(-90, 91, 2):
-				tnow = datetime.datetime.utcnow()
-				tnow = tnow.replace(tzinfo = utc)
+			    # https://blog.miguelgrinberg.com/post/it-s-time-for-a-change-datetime-utcnow-is-now-deprecated
+				tnow = datetime.datetime.now(datetime.timezone.utc)
 				td = datetime.timedelta(minutes = 1)
 				t = tnow + x * td
 				t = ts.from_datetime(t)

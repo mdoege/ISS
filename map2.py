@@ -9,7 +9,7 @@ import cartopy.feature as cfeature
 from skyfield.api import load, wgs84, utc
 import datetime
 
-hours = 2
+hours = 6
 
 cities = open("cities.tsv").readlines()
 
@@ -17,7 +17,7 @@ plt.figure(figsize = (100, 50))
 ax = plt.axes((0, 0, 1, 1), projection=ccrs.PlateCarree())
 ax.stock_img()
 ax.coastlines(resolution='10m')
-ax.add_feature(Nightshade(datetime.datetime.utcnow(), alpha=0.2))
+#ax.add_feature(Nightshade(datetime.datetime.utcnow(), alpha=0.2))
 ax.add_feature(cfeature.LAND)
 #ax.add_feature(cfeature.COASTLINE)
 ax.add_feature(cfeature.BORDERS)
@@ -36,8 +36,7 @@ def getpos():
 	lat, lon = wgs84.latlon_of(geocentric)
 	return lat.degrees, lon.degrees
 
-tnow = datetime.datetime.utcnow()
-tnow = tnow.replace(tzinfo = utc)
+tnow = datetime.datetime.now(datetime.timezone.utc)
 
 X, Y = [], []
 

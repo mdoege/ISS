@@ -30,8 +30,7 @@ def getpos():
 	lat, lon = wgs84.latlon_of(geocentric)
 	return lat.degrees, lon.degrees
 
-tnow = datetime.datetime.utcnow()
-tnow = tnow.replace(tzinfo = utc)
+tnow = datetime.datetime.now(datetime.timezone.utc)
 
 X, Y = [], []
 
@@ -60,7 +59,7 @@ m.drawcountries(color = "red", linewidth = 2)
 m.drawstates(color = "green")
 #m.drawrivers(color = "blue")
 date = datetime.datetime.now(datetime.timezone.utc)
-m.nightshade(date)
+#m.nightshade(date)
 
 #plt.show()
 #plt.savefig("map.pdf")
