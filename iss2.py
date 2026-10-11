@@ -3,9 +3,9 @@
 # ISS tracker (needs Skyfield)
 
 import pygame
-from skyfield.api import load, wgs84, utc
+from skyfield.api import load, wgs84, utc, EarthSatellite
 from daynight import get_img
-import time, datetime, os.path
+import csv, time, datetime, os.path
 
 UPDATE = 0.5  # zoomed map update interval in s
 UPDATETRACK = 10  # track update interval in s
@@ -21,18 +21,22 @@ b2 = pygame.image.load("earth4k_3_bright.png")
 b2 = pygame.transform.scale(b2, (BMAPW, ZMAPW))
 
 # download new orbital elements each day
-try:
-    mtime = os.path.getmtime("stations.txt")
-except:
-    mtime = 0
-if time.time() - mtime > 40000:
-    update = True
-else:
-    update = False
-
 # from https://rhodesmill.org/skyfield/earth-satellites.html
-stations_url = "https://celestrak.com/NORAD/elements/stations.txt"
-satellites = load.tle_file(stations_url, reload=update)
+
+csvname = "stations.csv"
+base = "https://celestrak.org/NORAD/elements/gp.php"
+url = base + "?GROUP=stations&FORMAT=csv"
+max_days = 1
+
+if not load.exists(csvname) or load.days_old(csvname) >= max_days:
+    load.download(url, filename=csvname)
+
+with load.open(csvname, mode="r") as f:
+    data = list(csv.DictReader(f))
+
+ts = load.timescale()
+satellites = [EarthSatellite.from_omm(ts, fields) for fields in data]
+
 by_name = {sat.name: sat for sat in satellites}
 satellite = by_name["ISS (ZARYA)"]
 ts = load.timescale()
