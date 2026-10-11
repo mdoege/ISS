@@ -31,31 +31,31 @@ satellite = by_name['ISS (ZARYA)']
 ts = load.timescale()
 
 def getpos():
-	tnow = ts.now()
-	geocentric = satellite.at(tnow)
-	lat, lon = wgs84.latlon_of(geocentric)
-	return lat.degrees, lon.degrees
+    tnow = ts.now()
+    geocentric = satellite.at(tnow)
+    lat, lon = wgs84.latlon_of(geocentric)
+    return lat.degrees, lon.degrees
 
 tnow = datetime.datetime.now(datetime.timezone.utc)
 
 X, Y = [], []
 
 for x in range(0, 3 * hours * 60):
-	td = datetime.timedelta(seconds = 20)
-	t = tnow + x * td
-	t = ts.from_datetime(t)
-	geocentric = satellite.at(t)
-	lat, lon = wgs84.latlon_of(geocentric)
-	iss = lat.degrees, lon.degrees
-	X.append(iss[1])
-	Y.append(iss[0])
-	plt.plot(iss[1], iss[0], "bs", lw = 5, transform=ccrs.Geodetic())
+    td = datetime.timedelta(seconds = 20)
+    t = tnow + x * td
+    t = ts.from_datetime(t)
+    geocentric = satellite.at(t)
+    lat, lon = wgs84.latlon_of(geocentric)
+    iss = lat.degrees, lon.degrees
+    X.append(iss[1])
+    Y.append(iss[0])
+    plt.plot(iss[1], iss[0], "bs", lw = 5, transform=ccrs.Geodetic())
 
 
 for l in cities:
-	c = l.split("\t")
-	plt.plot(float(c[1]), float(c[0]), "ro", lw = 5, transform=ccrs.Geodetic())
-	plt.text(float(c[1]), float(c[0]), c[2], 
+    c = l.split("\t")
+    plt.plot(float(c[1]), float(c[0]), "ro", lw = 5, transform=ccrs.Geodetic())
+    plt.text(float(c[1]), float(c[0]), c[2], 
          horizontalalignment='left',
          transform=ccrs.Geodetic())
 
