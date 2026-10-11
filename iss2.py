@@ -20,8 +20,8 @@ bg = pygame.image.load("cities.png")
 b2 = pygame.image.load("earth4k_3_bright.png")
 b2 = pygame.transform.scale(b2, (BMAPW, ZMAPW))
 
-# download new orbital elements each day
-# from https://rhodesmill.org/skyfield/earth-satellites.html
+# download new orbital elements each day;
+# see code at https://rhodesmill.org/skyfield/earth-satellites.html
 
 csvname = "stations.csv"
 base = "https://celestrak.org/NORAD/elements/gp.php"
