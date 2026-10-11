@@ -6,8 +6,8 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 from cartopy.feature.nightshade import Nightshade
 import cartopy.feature as cfeature
-from skyfield.api import load, wgs84, utc
-import datetime
+from skyfield.api import load, wgs84, utc, EarthSatellite
+import csv, datetime
 
 hours = 6
 
@@ -23,9 +23,23 @@ ax.add_feature(cfeature.LAND)
 ax.add_feature(cfeature.BORDERS)
 ax.add_feature(cfeature.STATES)
 
-# from https://rhodesmill.org/skyfield/earth-satellites.html
-stations_url = "https://celestrak.com/NORAD/elements/stations.txt"
-satellites = load.tle_file(stations_url)
+# download new orbital elements each day;
+# see code at https://rhodesmill.org/skyfield/earth-satellites.html
+
+csvname = "stations.csv"
+base = "https://celestrak.org/NORAD/elements/gp.php"
+url = base + "?GROUP=stations&FORMAT=csv"
+max_days = 1
+
+if not load.exists(csvname) or load.days_old(csvname) >= max_days:
+    load.download(url, filename=csvname)
+
+with load.open(csvname, mode="r") as f:
+    data = list(csv.DictReader(f))
+
+ts = load.timescale()
+satellites = [EarthSatellite.from_omm(ts, fields) for fields in data]
+
 by_name = {sat.name: sat for sat in satellites}
 satellite = by_name["ISS (ZARYA)"]
 ts = load.timescale()

@@ -5,8 +5,8 @@
 from mpl_toolkits.basemap import Basemap
 import numpy as np
 import matplotlib.pyplot as plt
-from skyfield.api import load, wgs84, utc
-import time, datetime, os
+from skyfield.api import load, wgs84, utc, EarthSatellite
+import csv, time, datetime, os
 
 hours = 2  # number of hours to plot
 
@@ -17,9 +17,23 @@ plt.gcf().add_axes((0, 0, 1, 1))  # https://e2eml.school/matplotlib_framing.html
 
 m = Basemap(projection="cyl", resolution="l")
 
-# from https://rhodesmill.org/skyfield/earth-satellites.html
-stations_url = "https://celestrak.com/NORAD/elements/stations.txt"
-satellites = load.tle_file(stations_url)
+# download new orbital elements each day;
+# see code at https://rhodesmill.org/skyfield/earth-satellites.html
+
+csvname = "stations.csv"
+base = "https://celestrak.org/NORAD/elements/gp.php"
+url = base + "?GROUP=stations&FORMAT=csv"
+max_days = 1
+
+if not load.exists(csvname) or load.days_old(csvname) >= max_days:
+    load.download(url, filename=csvname)
+
+with load.open(csvname, mode="r") as f:
+    data = list(csv.DictReader(f))
+
+ts = load.timescale()
+satellites = [EarthSatellite.from_omm(ts, fields) for fields in data]
+
 by_name = {sat.name: sat for sat in satellites}
 satellite = by_name["ISS (ZARYA)"]
 ts = load.timescale()
