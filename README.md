@@ -12,6 +12,8 @@ Note that the video feed lags a little behind the live map.
 
 ### Matplotlib scripts
 
+These create high-res PNG world maps (map.png and map2.png):
+
 * map.py for [Basemap](https://matplotlib.org/basemap/)
 * map2.py for [Cartopy](https://scitools.org.uk/cartopy/)
 
