@@ -9,7 +9,7 @@ import cartopy.feature as cfeature
 from skyfield.api import load, wgs84, utc, EarthSatellite
 import csv, datetime
 
-hours = 6
+hours = 2  # number of hours to plot
 
 cities = open("cities.tsv").readlines()
 
