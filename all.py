@@ -38,7 +38,7 @@ while True:
         geocentric = satellite.at(t)
         lat, lon = wgs84.latlon_of(geocentric)
         y, x = lat.degrees, lon.degrees
-        print(x, y, satellite.name)
+        # print("%8.3f %8.3f %s" % (x, y, satellite.name))
         show = True
         for xx, yy in allxy:
             d = (x - xx) ** 2 + (y - yy) ** 2
