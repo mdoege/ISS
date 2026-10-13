@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from skyfield.api import load, wgs84, utc, EarthSatellite
 import csv, time, datetime, os
 
-plt.figure(figsize=(100, 50))
+plt.figure(figsize=(16, 8))
 plt.gcf().add_axes((0, 0, 1, 1))  # https://e2eml.school/matplotlib_framing.html#fill
 
 m = Basemap(projection="cyl", resolution="c")
