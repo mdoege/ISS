@@ -12,12 +12,15 @@ Note that the video feed lags a little behind the live map.
 
 ### Matplotlib scripts
 
-These create high-res PNG world maps (map.png and map2.png):
+The first two scripts output high-res PNG world maps (map.png and map2.png).
+ISS positions are plotted at 20-second intervals over the next two hours.
 
-* map.py for [Basemap](https://matplotlib.org/basemap/)
-* map2.py for [Cartopy](https://scitools.org.uk/cartopy/)
+* map.py (for [Basemap](https://matplotlib.org/basemap/))
+* map2.py (for [Cartopy](https://scitools.org.uk/cartopy/))
 
-Positions are shown at 20-second intervals over the next two hours.
+There is also a script to show the current positions of *all* objects from stations.csv in an interactive Matplotlib window:
+
+* all.py (for Basemap)
 
 ### Screenshots
 
