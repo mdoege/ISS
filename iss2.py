@@ -36,10 +36,8 @@ with load.open(csvname, mode="r") as f:
 
 ts = load.timescale()
 satellites = [EarthSatellite.from_omm(ts, fields) for fields in data]
-
 by_name = {sat.name: sat for sat in satellites}
 satellite = by_name["ISS (ZARYA)"]
-ts = load.timescale()
 
 
 def getpos():
