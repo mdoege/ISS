@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from skyfield.api import load, wgs84, utc, EarthSatellite
 import csv, time, datetime, os
 
-plt.figure(figsize=(16, 8))
+plt.figure(figsize=(12, 6))
 plt.gcf().add_axes((0, 0, 1, 1))  # https://e2eml.school/matplotlib_framing.html#fill
 
 m = Basemap(projection="cyl", resolution="c")
@@ -63,7 +63,7 @@ while True:
     m.drawstates(color="green")
     # m.drawrivers(color = "blue")
     date = datetime.datetime.now(datetime.timezone.utc)
-    # m.nightshade(date)
+    m.nightshade(date)
     plt.draw()
     plt.pause(3)
     plt.cla()
