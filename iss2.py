@@ -86,6 +86,8 @@ class ISS:
                     except:
                         c = 120, 120, 120
                     s.plot.set_at((x, y), c)
+            s.plotbig = pygame.transform.scale(s.plot, (ZMAPW, ZMAPW))
+            s.plotbig = s.plotbig.convert_alpha()
 
         # update track data
         dt = time.time() - s.lasttrack
@@ -106,8 +108,6 @@ class ISS:
             s.dn = pygame.transform.smoothscale(s.dn, (BMAPW, ZMAPW))
             s.dn = s.dn.convert_alpha()
 
-        out = pygame.transform.scale(s.plot, (ZMAPW, ZMAPW))
-        out = out.convert_alpha()
         s.screen.blit(s.b2, (ZMAPW, 0))
         s.screen.blit(s.dn, (ZMAPW, 0))
 
@@ -135,7 +135,7 @@ class ISS:
                 s.screen, (255, 0, 0), [lx - CSIZ // 2, ly - CSIZ // 2, CSIZ, CSIZ]
             )
 
-        s.screen.blit(out, (0, 0))
+        s.screen.blit(s.plotbig, (0, 0))
         pygame.display.flip()
 
 
