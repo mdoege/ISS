@@ -16,10 +16,6 @@ ZMAPW = WIN_WIDTH - BMAPW  # zoomed map width
 LWID = 4  # line width
 CSIZ = int(100 / 8192 * BMAPW)  # cursor size
 
-bg = pygame.image.load("cities.png")
-b2 = pygame.image.load("earth4k_3_bright.png")
-b2 = pygame.transform.scale(b2, (BMAPW, ZMAPW))
-
 # download new orbital elements each day;
 # see code at https://rhodesmill.org/skyfield/earth-satellites.html
 
@@ -58,6 +54,10 @@ class ISS:
         s.lasttrack = 0
         s.plot = pygame.Surface((100, 100))
         s.lpos = []
+        s.bg = pygame.image.load("cities.png")
+        s.b2 = pygame.image.load("earth4k_3_bright.png")
+        s.b2 = pygame.transform.scale(s.b2, (BMAPW, ZMAPW))
+        s.b2 = s.b2.convert_alpha()
 
     def events(s):
         for event in pygame.event.get():
@@ -82,7 +82,7 @@ class ISS:
             for y in range(100):
                 for x in range(100):
                     try:
-                        c = bg.get_at(((x + mx - 50) % 8192, y + my - 50))
+                        c = s.bg.get_at(((x + mx - 50) % 8192, y + my - 50))
                     except:
                         c = 120, 120, 120
                     s.plot.set_at((x, y), c)
@@ -93,7 +93,7 @@ class ISS:
             s.lasttrack = time.time()
             s.lpos = []
             # calculate track for +-90 minutes:
-            for x in range(-90, 91, 2):
+            for x in range(-90, 91):
                 # https://blog.miguelgrinberg.com/post/it-s-time-for-a-change-datetime-utcnow-is-now-deprecated
                 tnow = datetime.datetime.now(datetime.timezone.utc)
                 td = datetime.timedelta(minutes=1)
@@ -104,9 +104,11 @@ class ISS:
                 s.lpos.append((lat.degrees, lon.degrees))
             s.dn = get_img()
             s.dn = pygame.transform.smoothscale(s.dn, (BMAPW, ZMAPW))
+            s.dn = s.dn.convert_alpha()
 
         out = pygame.transform.scale(s.plot, (ZMAPW, ZMAPW))
-        s.screen.blit(b2, (ZMAPW, 0))
+        out = out.convert_alpha()
+        s.screen.blit(s.b2, (ZMAPW, 0))
         s.screen.blit(s.dn, (ZMAPW, 0))
 
         # draw track
