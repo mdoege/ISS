@@ -5,7 +5,7 @@
 import pygame
 from skyfield.api import load, wgs84, utc, EarthSatellite
 from daynight import get_img
-import csv, time, datetime, os.path
+import csv, time, datetime
 
 UPDATE = 0.5  # zoomed map update interval in s
 UPDATETRACK = 10  # track update interval in s
