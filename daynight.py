@@ -13,7 +13,7 @@ by Paul Schlyter
 
 import pygame
 from math import *
-import os, sys, time
+import time
 
 tpi = 2 * pi
 degs = 180 / pi
